@@ -31,7 +31,7 @@ public class BlogUser {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) //프로젝트에서 연결된 DB 넘버링 전략을 따라간다.
 	private int id; //auto-increment
 	
-	@Column(nullable = false,length = 30)
+	@Column(nullable = false,length = 30, unique = true)
 	private String username;
 	
 	@Column(nullable = false,length = 100) //비밀번호 => 해쉬 (암호화) 

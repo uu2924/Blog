@@ -30,9 +30,9 @@ dependencies {
 	//implementation 'org.springframework.boot:spring-boot-starter-security'
 	
 	//추가 라이브러리
-	//implementation 'javax.servlet:jstl'	
-	//implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-	//implementation 'org.springframework.security:spring-security-taglibs'
+	implementation 'javax.servlet:jstl'	
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	implementation 'org.springframework.security:spring-security-taglibs'
 	//implementation 'org.postgresql:postgresql'
 	
 }
