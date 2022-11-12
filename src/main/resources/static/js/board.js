@@ -1,18 +1,24 @@
 let index = {
-	init: function(){
-		$("#btn-save").on("click", ()=>{ //function 사용하지 않은이유는 ()=>{}를 사용해 this를 바인딩하려고
+	init: function() {
+		$("#btn-save").on("click", () => { //function 사용하지 않은이유는 ()=>{}를 사용해 this를 바인딩하려고
 			this.save();
 		});
-		
+
+		$("#btn-delete").on("click", () => { //function 사용하지 않은이유는 ()=>{}를 사용해 this를 바인딩하려고
+			this.deleteById();
+		});
+
+		$("#btn-update").on("click", () => { //function 사용하지 않은이유는 ()=>{}를 사용해 this를 바인딩하려고
+			this.updateById();
+		});
 	},
-	
-	save: function(){
-		//alert("user의 save함수 호출됨");
+
+	save: function() {
 		let data = {
 			title: $("#title").val(),
 			content: $("#content").val()
 		}
-		
+		//console.log(data);
 		$.ajax({
 			type: "POST",
 			url: "/api/board",
@@ -20,15 +26,51 @@ let index = {
 			contentType: "application/json; charset=utf-8",
 			dataType: "json"
 
-		}).done(function(resp){
+		}).done(function(resp) {
 			alert("글쓰기가 완료되었습니다.");
-			location.href="/";
-		}).fail(function(error){
+			location.href = "/";
+		}).fail(function(error) {
 			alert(JSON.stringify(error));
-		}); 
+		});
+	},
+
+	deleteById: function() {
+		//console.log(data);
+		let id = $("#id").text();
+		$.ajax({
+			type: "DELETE",
+			url: "/api/board/" + id,
+			dataType: "json"
+
+		}).done(function(resp) {
+			alert("삭제가 완료되었습니다.");
+			location.href = "/";
+		}).fail(function(error) {
+			alert(JSON.stringify(error));
+		});
 	},
 	
+	updateById: function() {
+		let id =$("#id").val();
+		let data = {
+			title: $("#title").val(),
+			content: $("#content").val()
+		}
+		//console.log(data);
+		$.ajax({
+			type: "PUT",
+			url: "/api/board/"+id,
+			data: JSON.stringify(data),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json"
 
+		}).done(function(resp) {
+			alert("글수정이 완료되었습니다.");
+			location.href = "/";
+		}).fail(function(error) {
+			alert(JSON.stringify(error));
+		});
+	},
 }
 
 index.init();
