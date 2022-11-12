@@ -11,14 +11,14 @@
 			<label for="email">Email address:</label> <input type="email" class="form-control" placeholder="Enter email" id="email">
 		</div>
 		<div class="form-group">
-			<label for="passowrd">Password:</label> <input type="password" class="form-control" placeholder="Enter password" id="password">
+			<label for="password">Password:</label> <input type="password" class="form-control" placeholder="Enter password" id="password">
 		</div>		
 	</form>
 	<button id="btn-save" class="btn btn-primary">회원가입</button>
 </div>
 <br />
 
-<script src="/blog/js/user.js"></script>
+<script src="/js/user.js"></script>
 <%@ include file="../layout/footer.jsp"%>
 
 
