@@ -8,9 +8,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.cos.blog.config.auth.PrincipalDetailService;
+import com.cos.blog.config.jwt.JwtAuthenticationFilter;
+import com.cos.blog.config.jwt.JwtTokenProvider;
 
 //빈등록: 스프링컨테이너에서 객체 관리
 @Configuration //빈등록 (IOC관리)
@@ -20,6 +24,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private PrincipalDetailService principalDetailService;
+	
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
 	
 	@Bean //IOC가됨 리턴하는 값을 스프링이 관리
 	public BCryptPasswordEncoder encodePWD() {
@@ -36,17 +43,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		/*
+		 * http .csrf().disable() //csfr 토큰 비활셩화 .authorizeHttpRequests()
+		 * .antMatchers("/","/auth/**","/js/**","/css/**","/image/**") .permitAll()
+		 * .anyRequest() .authenticated() .and() .formLogin()
+		 * .loginPage("/auth/loginForm") //인증이 필요한 폼은 loginform으로 간다.
+		 * .loginProcessingUrl("/auth/loginProc") .defaultSuccessUrl("/"); //스프링시큐어리티가
+		 * 해당 주소로 요청오는 로그인을 가로채 대신로그인 한다.
+		 */	
 		http
 		  .csrf().disable() //csfr 토큰 비활셩화
+		  .httpBasic().disable() // rest api이므로 기본설정 미사용
+		  .csrf().disable() // rest api이므로 csrf 보안 미사용
+		  .formLogin().disable()
+		  .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt로 인증하므로 세션 미사용
+		  .and()
 		  .authorizeHttpRequests()
 			.antMatchers("/","/auth/**","/js/**","/css/**","/image/**")
 			.permitAll()
 			.anyRequest()
-			.authenticated() 
+			.authenticated()
 		  .and()
-		    .formLogin()
-		    .loginPage("/auth/loginForm") //인증이 필요한 폼은 loginform으로 간다.
-		    .loginProcessingUrl("/auth/loginProc")
-		    .defaultSuccessUrl("/"); //스프링시큐어리티가 해당 주소로 요청오는 로그인을 가로채 대신로그인 한다.
+			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),UsernamePasswordAuthenticationFilter.class); //스프링시큐어리티가 해당 주소로 요청오는 로그인을 가로채 대신로그인 한다.
 	}
 }

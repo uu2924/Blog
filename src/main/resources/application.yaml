@@ -6,7 +6,10 @@ server:
       charset: UTF-8
       enabled: true
       force: true
-    
+
+jwt:
+  secretKey: myblog
+      
 spring:
   mvc:
     view:
@@ -15,7 +18,7 @@ spring:
       
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/mini?serverTimezone=Asia/Seoul
+    url: jdbc:postgresql://localhost:5432/blog?serverTimezone=Asia/Seoul
     username: mini
     password: mini
     
@@ -34,3 +37,6 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+
+
+  
